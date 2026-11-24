@@ -1,4 +1,4 @@
-# RETTREVIAL
+# RETRIEVAL
 
 documents = [
     "Formula 1 is an international motorsport championship.", #document 1
@@ -28,14 +28,7 @@ def retrieve(query,documents,top_k=2):
 
     return results[:top_k] #limit number of retrieved documents
 
-query="Which tyres provide high grip?"
-results=retrieve(query,documents)
-
-for score,document in results:
-    print(f"Score: {score}")
-    print(f"Document: {document}\n")
-
-# AUGMENTATION - enrichinng user query with retreived information beofre sending to LLM
+# AUGMENTATION - enriching user query with retrieved information before sending to LLM
 
 def augment(query,results):
     context="\n".join(document for score, document in results)
@@ -51,11 +44,6 @@ def augment(query,results):
 
     return prompt
 
-query2=input("Ask a question: ")
-results=retrieve(query2,documents)
-prompt=augment(query2,results)
-print(prompt)
-
 # GENERATION - send our augmented prompt to LLM and receive a natural language answer
 
 import os
@@ -64,9 +52,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client=Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def generate(prompt):
+    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
     response=client.chat.completions.create(
         model=os.environ["GROQ_MODEL"],
         messages=[
@@ -91,14 +79,10 @@ def rag(input_query):
 
     return answer
 
-while True:
-    input_query=input("\nAsk a question: ")
-
-    if input_query.lower()=="exit":
-        break
-
-    if not input_query.strip():
-        continue
-
-    answer = rag(input_query)
-    print("\nAnswer:", answer)
+if __name__ == "__main__":
+    while True:
+        query = input("\nAsk a question: ").strip()
+        if query.lower() == "exit":
+            break
+        if query:
+            print("\nAnswer:", rag(query))
