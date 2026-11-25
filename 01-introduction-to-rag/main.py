@@ -1,4 +1,4 @@
-# RETRIEVAL
+# RETRIEVAL - retreive common words from document matching  user query
 
 documents = [
     "Formula 1 is an international motorsport championship.", #document 1
@@ -19,7 +19,7 @@ def retrieve(query,documents,top_k=2):
 
     for document in documents:
         document_words=tokenize(document)
-        score=len(query_words&document_words) #find common words using '&' and calculate relevance score using len()
+        score=len(query_words & document_words) #find common words using '&' and calculate relevance score using len()
 
         if score>0:
             results.append((score,document))
